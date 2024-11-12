@@ -55,5 +55,5 @@ wss.on("connection", (ws) => {
 });
 
 server.listen(8080, () =>
-  console.log("Server running on http://localhost:8080")
+  console.log("Server running on http://18.185.88.49:8080")
 );
