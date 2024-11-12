@@ -1,0 +1,24 @@
+{
+  "name": "jecnadocs",
+  "version": "1.0.0",
+  "description": "jecna docs type shit",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reamlesss/JecnaDocs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reamlesss/JecnaDocs/issues"
+  },
+  "homepage": "https://github.com/reamlesss/JecnaDocs#readme",
+  "dependencies": {
+    "express": "^4.21.1",
+    "websocket": "^1.0.35",
+    "ws": "^8.18.0"
+  }
+}
