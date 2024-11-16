@@ -1,4 +1,3 @@
-
 const ws = new WebSocket("ws://localhost:8080");
 const editor = document.getElementById("editor");
 const statustext = document.getElementById("status");
@@ -6,13 +5,13 @@ const usersDiv = document.getElementById("users");
 
 // Stav připojení
 ws.onopen = () => {
-  statustext.textContent = "Status: Connected";
+  statustext.textContent = "Connected";
   // status.style.color = "green";
   statustext.classList.add("status-connected");
 };
 
 ws.onclose = () => {
-  statustext.textContent = "Status: Disconnected";
+  statustext.textContent = "Disconnected";
   statustext.classList.add("status-disconnected");
 };
 

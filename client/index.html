@@ -8,17 +8,21 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
-    <h1>Ječná Docs</h1>
-    <div style="display: flex; justify-content: center; align-items: center;">
-        <p id="status">Status: Connecting...</p>
+    <div class="center-container">
+        <h1>Ječná Docs</h1>
+
+        <textarea id="editor"></textarea>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <p id="status">Status: Connecting...</p>
+        </div>
+        <div id="users"></div>
+
     </div>
-    <textarea id="editor"></textarea>
-    <div id="users"></div>
     <script src="client.js"></script>
 </body>
 
