@@ -1,0 +1,91 @@
+body {
+  font-family: "Roboto Mono", monospace;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #fdfffc;
+}
+
+h1 {
+  text-align: center;
+  font-size: 50px;
+  color: #f1d302;
+  margin-top: 20px;
+}
+
+p#status {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+#users {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 1.2rem;
+  color: #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+textarea {
+  display: block;
+  width: 80%;
+  height: 300px;
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: "Roboto Mono", monospace;
+
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  resize: none;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: white;
+}
+
+textarea:focus {
+  border-color: #0056b3;
+  box-shadow: 0 4px 10px rgba(0, 86, 179, 0.2);
+}
+
+/* === Seznam uživatelů === */
+#users {
+  background-color: #e8f4ff;
+  padding: 10px;
+  border: 1px solid #b3d7ff;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+/* === Stav připojení === */
+p#status {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 20px;
+  color: white;
+}
+
+.status-connected {
+  color: rgb(97, 255, 97);
+}
+
+p#status.red {
+  background-color: #dc3545;
+}
+
+/* === Pro responsivitu === */
+@media screen and (max-width: 768px) {
+  textarea {
+    width: 90%;
+    height: 250px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
