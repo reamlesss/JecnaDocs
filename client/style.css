@@ -6,6 +6,18 @@ body {
   color: #fdfffc;
 }
 
+/* body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(100deg, #00000048, #44ff9211);
+  filter: blur(10px);
+  z-index: -1; */
+/* } */
+
 .center-container {
   display: flex;
   justify-content: center;
@@ -38,29 +50,34 @@ textarea {
   height: 300px;
   margin: 0 auto;
   padding: 10px;
-  font-size: 1rem;
+  font-size: 20px;
   border-radius: 10px;
   resize: none;
   outline: none;
-  background-color: transparent;
+  border-color: transparent;
+  background-color: rgb(26, 26, 26);
   color: white;
   transition: 0.5s;
 }
 
 textarea:focus {
+  font-size: 30px;
+}
+
+#users {
+  /* background-color: #ffffff; */
+  padding: 10px;
+  /* border: 1px solid #ffffff; */
+  border-radius: 5px;
+  display: inline-block;
+  cursor: default;
+  transition: 0.5s;
+  color: rgb(255, 255, 255);
+}
+#users:hover {
   transform: scale(110%);
 }
 
-/* === Seznam uživatelů === */
-#users {
-  background-color: #e8f4ff;
-  padding: 10px;
-  border: 1px solid #b3d7ff;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-/* === Stav připojení === */
 p#status {
   display: inline-block;
   padding: 8px 15px;
@@ -71,15 +88,25 @@ p#status {
 }
 
 .status-connected {
+  animation: fadeIn 1s ease-in-out;
   color: rgb(97, 255, 97) !important;
   text-shadow: 0px 0px 5px rgb(97, 255, 97);
 }
 
-p#status.red {
+.status-disconnected {
   color: #dc3545;
-  text-shadow: 0px 0px 10px #dc3545;
+  /* text-shadow: 0px 0px 10px #dc3545; */
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0px 0px 5px rgb(97, 255, 97);
+  }
+}
 /* === Pro responsivitu === */
 @media screen and (max-width: 768px) {
   textarea {
