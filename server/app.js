@@ -7,7 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Nastavení statických souborů
 app.use(express.static(path.join(__dirname, "../client")));
 
 let clients = new Map();
