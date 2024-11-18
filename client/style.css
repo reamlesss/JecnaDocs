@@ -60,8 +60,13 @@ textarea {
   transition: 0.5s;
 }
 
-textarea:focus {
+/* textarea:focus {
   font-size: 30px;
+} */
+.info-container {
+  display: flex;
+  flex-direction: row;
+  gap: 800px;
 }
 
 #users {

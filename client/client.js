@@ -28,7 +28,7 @@ ws.onmessage = (event) => {
   }
 
   if (message.type === "users-update") {
-    usersDiv.innerHTML = ` ${message.users.join(", ")}`;
+    usersDiv.innerHTML = `Users: ${message.users.join(", ")}`;
   }
 };
 
