@@ -11,6 +11,8 @@ app.use(express.static(path.join(__dirname, "../client")));
 
 let clients = new Map();
 
+const usernames = ["Jarda_Petarda","Guláš_Lukáš","Vašek_Hrášek","Majdička_Ředkvička","Masová_koule_Martin","Sushi_Sam","Šimon_Mimoň",""]
+
 wss.on("connection", (ws) => {
   const userId = `User_${Math.floor(Math.random() * 1000)}`;
   clients.set(ws, userId);
@@ -18,7 +20,13 @@ wss.on("connection", (ws) => {
   broadcastClients();
 
   ws.on("message", (message) => {
-    const parsedMessage = JSON.parse(message);
+    let parsedMessage;
+    try {
+      parsedMessage = JSON.parse(message);
+    } catch (error) {
+      console.error("Invalid message received:", message);
+      return;
+    }
 
     if (parsedMessage.type === "text-update") {
       broadcast(
@@ -31,25 +39,34 @@ wss.on("connection", (ws) => {
     }
 
     if (parsedMessage.type === "cursor-update") {
+      // console.log("cursor update received: ", parsedMessage.cursor);
       broadcast(
         JSON.stringify({
           type: "cursor-update",
-          cursor: parsedMessage.cursor,
-          userId: userId,
-        })
+          clientId: userId,
+          position: parsedMessage.cursor,
+        }),
+        ws // Exclude the sender
       );
     }
   });
 
   ws.on("close", () => {
+    const userId = clients.get(ws);
     clients.delete(ws);
+    broadcast(
+      JSON.stringify({
+        type: "remove-cursor",
+        clientId: userId,
+      })
+    );
     broadcastClients();
   });
 });
 
-function broadcast(data) {
+function broadcast(data, excludeClient = null) {
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN && client !== excludeClient) {
       client.send(data);
     }
   });
@@ -60,6 +77,7 @@ function broadcastClients() {
   broadcast(JSON.stringify({ type: "users-update", users }));
 }
 
-server.listen(8080, () => {
-  console.log("Server is running on http://localhost:8080");
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

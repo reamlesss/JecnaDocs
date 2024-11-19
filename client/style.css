@@ -32,6 +32,7 @@ h1 {
   color: #ffffff;
   margin-top: 20px;
   font-weight: normal;
+  cursor: default;
 }
 
 #users {
@@ -60,13 +61,23 @@ textarea {
   transition: 0.5s;
 }
 
-/* textarea:focus {
-  font-size: 30px;
-} */
+/* Info container and elements */
 .info-container {
   display: flex;
-  flex-direction: row;
-  gap: 800px;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 10px auto 0; /* Add spacing below textarea and center it */
+}
+
+#status {
+  color: white;
+  margin: 0;
+}
+
+#users {
+  color: white;
+  text-align: right;
 }
 
 #users {
@@ -99,8 +110,8 @@ p#status {
 }
 
 .status-disconnected {
-  color: #dc3545;
-  /* text-shadow: 0px 0px 10px #dc3545; */
+  color: #ff172e !important;
+  text-shadow: 0px 0px 5px #ff172e;
 }
 
 @keyframes fadeIn {
@@ -122,4 +133,13 @@ p#status {
   h1 {
     font-size: 2rem;
   }
+}
+
+.cursor {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  pointer-events: none; /* Ensures it doesn’t block input */
+  z-index: 1000;
 }
