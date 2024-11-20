@@ -7,14 +7,59 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+
+
 app.use(express.static(path.join(__dirname, "../client")));
+
+
 
 let clients = new Map();
 
-const usernames = ["Jarda_Petarda","Guláš_Lukáš","Vašek_Hrášek","Majdička_Ředkvička","Masová_koule_Martin","Sushi_Sam","Šimon_Mimoň",""]
+//Array of strings that are then used as usernames
+const usernames = [
+  "Jarda_Petarda",
+  "Guláš_Lukáš",
+  "Vašek_Hrášek",
+  "Majdička_Ředkvička",
+  "Masová_koule_Martin",
+  "Sushi_Sam",
+  "Šimon_Mimoň",
+  "Radek_párek",
+  "Daník_Braník",
+  "Martin_Pervitin"
+];
+
+/**
+ *check if username is already taken by other client
+ * @param username username
+ * @returns {boolean} returns the decision (already taken/free)
+ */
+function isUsernameTaken(username) {
+  for (const [, clientUsername] of clients) {
+    if (clientUsername === username) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * gets username from the array usernames and uses isUsernameTaken(username) func. to check availability
+ * @returns {string} returns username that is not taken
+ */
+function getUsername() {
+  for (const name of usernames){
+    if(isUsernameTaken(name)){
+        console.log(`${name}Is already taken`)
+    }else{
+      return name;
+    }
+  }
+}
 
 wss.on("connection", (ws) => {
-  const userId = `User_${Math.floor(Math.random() * 1000)}`;
+
+  const userId = getUsername();
   clients.set(ws, userId);
 
   broadcastClients();

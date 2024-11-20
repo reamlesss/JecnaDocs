@@ -5,6 +5,13 @@ const usersDiv = document.getElementById("users");
 
 const cursors = {};
 
+
+/**
+ * function updating cursor based on data that the backend sends to the client
+ * @param clientId id of the owner of cursor
+ * @param position position (x,y) of the cursor
+ */
+
 function updateCursor(clientId, position) {
   if (!cursors[clientId]) {
     // Create cursor container
@@ -22,6 +29,7 @@ function updateCursor(clientId, position) {
     cursorImage.src = "./cursor.png"; // Replace with the path to your cursor image
     cursorImage.style.width = "20px"; // Adjust size as needed
     cursorImage.style.height = "20px";
+
 
     // Create client ID label
     const label = document.createElement("span");
@@ -111,4 +119,18 @@ document.addEventListener("mousemove", (e) => {
       cursor: cursor,
     })
   );
+});
+
+editor.addEventListener("select",() =>{
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd
+
+  ws.send(
+      JSON.stringify({
+        type:"text-select",
+        selectionRange: {start,end}
+      })
+  )
+
+
 });
