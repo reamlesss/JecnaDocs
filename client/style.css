@@ -131,3 +131,21 @@ p#status {
   pointer-events: none; /* Ensures it doesn’t block input */
   z-index: 1000;
 }
+
+.selection-overlay {
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1000;
+  visibility: visible;
+}
+
+.highlight {
+  position: absolute;
+  background-color: rgba(255, 255, 0, 0.5); /* Yellow highlight */
+  pointer-events: none;
+  z-index: 1000;
+  visibility: visible;
+  display: block;
+  border: 1px solid red;
+}

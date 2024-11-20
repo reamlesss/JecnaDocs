@@ -3,47 +3,40 @@ const editor = document.getElementById("editor");
 const statustext = document.getElementById("status");
 const usersDiv = document.getElementById("users");
 
+
+
 const cursors = {};
 
-
 /**
- * function updating cursor based on data that the backend sends to the client
- * @param clientId id of the owner of cursor
- * @param position position (x,y) of the cursor
+ * Updates the cursor based on data sent by the backend.
+ * @param {string} clientId The ID of the client owning the cursor.
+ * @param {Object} position The position (x, y) of the cursor.
  */
-
 function updateCursor(clientId, position) {
   if (!cursors[clientId]) {
-    // Create cursor container
     const cursorElement = document.createElement("div");
     cursorElement.className = "cursor";
     cursorElement.style.position = "absolute";
     cursorElement.style.display = "flex";
     cursorElement.style.flexDirection = "column";
     cursorElement.style.alignItems = "center";
-    cursorElement.style.pointerEvents = "none"; // Prevent interaction blocking
+    cursorElement.style.pointerEvents = "none";
     cursorElement.style.zIndex = "1000";
 
-    // Create cursor image
     const cursorImage = document.createElement("img");
-    cursorImage.src = "./cursor.png"; // Replace with the path to your cursor image
-    cursorImage.style.width = "20px"; // Adjust size as needed
+    cursorImage.src = "./cursor.png";
+    cursorImage.style.width = "20px";
     cursorImage.style.height = "20px";
 
-
-    // Create client ID label
     const label = document.createElement("span");
     label.textContent = clientId;
     label.style.color = "white";
     label.style.fontSize = "12px";
-    label.style.marginTop = "5px"; // Spacing between cursor and label
-    label.style.textShadow = "0 0 2px black"; // Improve readability
+    label.style.marginTop = "5px";
+    label.style.textShadow = "0 0 2px black";
 
-    // Append elements to the cursor container
     cursorElement.appendChild(cursorImage);
     cursorElement.appendChild(label);
-
-    // Add the cursor to the document
     document.body.appendChild(cursorElement);
     cursors[clientId] = cursorElement;
   }
@@ -64,18 +57,14 @@ function removeCursor(clientId) {
 // WebSocket connection status
 ws.onopen = () => {
   statustext.textContent = "Connected";
-  if (statustext.classList.contains("status-disconnected")) {
-    statustext.classList.remove("status-disconnected");
-  }
   statustext.classList.add("status-connected");
+  statustext.classList.remove("status-disconnected");
 };
 
 ws.onclose = () => {
   statustext.textContent = "Disconnected";
-  if (statustext.classList.contains("status-connected")) {
-    statustext.classList.remove("status-connected");
-  }
   statustext.classList.add("status-disconnected");
+  statustext.classList.remove("status-connected");
 };
 
 ws.onmessage = (event) => {
@@ -97,6 +86,14 @@ ws.onmessage = (event) => {
     if (message.type === "remove-cursor") {
       removeCursor(message.clientId);
     }
+
+    if (message.type === "text-select") {
+      console.log(
+          `User ${message.clientId} selected text:`,
+          message.selectionRange
+      );
+      updateSelection(message.clientId, message.selectionRange);
+    }
   } catch (error) {
     console.error("Invalid message received:", event.data);
   }
@@ -114,23 +111,20 @@ document.addEventListener("mousemove", (e) => {
   };
 
   ws.send(
-    JSON.stringify({
-      type: "cursor-update",
-      cursor: cursor,
-    })
+      JSON.stringify({
+        type: "cursor-update",
+        cursor: cursor,
+      })
   );
 });
 
-editor.addEventListener("select",() =>{
+editor.addEventListener("select", () => {
   const start = editor.selectionStart;
-  const end = editor.selectionEnd
-
+  const end = editor.selectionEnd;
   ws.send(
       JSON.stringify({
-        type:"text-select",
-        selectionRange: {start,end}
+        type: "text-select",
+        selectionRange: { start, end },
       })
-  )
-
-
+  );
 });

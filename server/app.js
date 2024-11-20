@@ -7,15 +7,11 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-
-
 app.use(express.static(path.join(__dirname, "../client")));
-
-
 
 let clients = new Map();
 
-//Array of strings that are then used as usernames
+// Array of strings that are then used as usernames
 const usernames = [
   "Jarda_Petarda",
   "Guláš_Lukáš",
@@ -26,11 +22,11 @@ const usernames = [
   "Šimon_Mimoň",
   "Radek_párek",
   "Daník_Braník",
-  "Martin_Pervitin"
+  "Martin_Pervitin",
 ];
 
 /**
- *check if username is already taken by other client
+ * Check if username is already taken by another client
  * @param username username
  * @returns {boolean} returns the decision (already taken/free)
  */
@@ -44,21 +40,20 @@ function isUsernameTaken(username) {
 }
 
 /**
- * gets username from the array usernames and uses isUsernameTaken(username) func. to check availability
+ * Gets username from the array usernames and uses isUsernameTaken(username) func. to check availability
  * @returns {string} returns username that is not taken
  */
 function getUsername() {
-  for (const name of usernames){
-    if(isUsernameTaken(name)){
-        console.log(`${name}Is already taken`)
-    }else{
+  for (const name of usernames) {
+    if (isUsernameTaken(name)) {
+      console.log(`${name} is already taken`);
+    } else {
       return name;
     }
   }
 }
 
 wss.on("connection", (ws) => {
-
   const userId = getUsername();
   clients.set(ws, userId);
 
@@ -73,25 +68,43 @@ wss.on("connection", (ws) => {
       return;
     }
 
+    // Handle text updates
     if (parsedMessage.type === "text-update") {
       broadcast(
-        JSON.stringify({
-          type: "text-update",
-          text: parsedMessage.text,
-          userId: userId,
-        })
+          JSON.stringify({
+            type: "text-update",
+            text: parsedMessage.text,
+            userId: userId,
+          })
       );
     }
 
+    // Handle cursor updates
     if (parsedMessage.type === "cursor-update") {
-      // console.log("cursor update received: ", parsedMessage.cursor);
       broadcast(
-        JSON.stringify({
-          type: "cursor-update",
-          clientId: userId,
-          position: parsedMessage.cursor,
-        }),
-        ws // Exclude the sender
+          JSON.stringify({
+            type: "cursor-update",
+            clientId: userId,
+            position: parsedMessage.cursor,
+          }),
+          ws // Exclude the sender
+      );
+    }
+
+    // Handle text selection
+    if (parsedMessage.type === "text-select") {
+      const selectionRange = parsedMessage.selectionRange;
+      broadcast(
+          JSON.stringify({
+            type: "text-select",
+            clientId: userId,
+            selectionRange: selectionRange,
+          }),
+          ws // Exclude the sender
+      );
+
+      console.log(
+          `User ${userId} selected text from position ${selectionRange.start} to ${selectionRange.end}`
       );
     }
   });
@@ -100,15 +113,20 @@ wss.on("connection", (ws) => {
     const userId = clients.get(ws);
     clients.delete(ws);
     broadcast(
-      JSON.stringify({
-        type: "remove-cursor",
-        clientId: userId,
-      })
+        JSON.stringify({
+          type: "remove-cursor",
+          clientId: userId,
+        })
     );
     broadcastClients();
   });
 });
 
+/**
+ * Broadcasts a message to all connected clients except the excluded one
+ * @param {string} data Message to broadcast
+ * @param {WebSocket} excludeClient The client to exclude from broadcasting
+ */
 function broadcast(data, excludeClient = null) {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN && client !== excludeClient) {
@@ -117,6 +135,9 @@ function broadcast(data, excludeClient = null) {
   });
 }
 
+/**
+ * Sends the list of connected users to all clients
+ */
 function broadcastClients() {
   const users = Array.from(clients.values());
   broadcast(JSON.stringify({ type: "users-update", users }));
