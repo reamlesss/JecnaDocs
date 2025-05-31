@@ -1,29 +1,29 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ječná Docs</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-            rel="stylesheet">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ječná Docs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
 
-    <body>
-        <div class="center-container">
-            <h1>Ječná Docs</h1>
-            <textarea id="editor"></textarea>
-            <div class="info-container">
-                <div style="display: flex; justify-content: center; align-items: center;">
-                    <p id="status">Status: Coçnnecting...</p>
-                </div>
-                <div class="User-List" id="users"></div>
+<body>
+    <div class="center-container">
+        <h1>Ječná Docs</h1>
+        <div id="editor" contenteditable="true"></div>
+        <div class="info-container">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <p id="status">Status: Connecting...</p>
             </div>
+            <div class="User-List" id="users"></div>
         </div>
-        <script src="client.js"></script>
-    </body>
+    </div>
+    <script src="client.js"></script>
+</body>
 
-    </html>
+</html>

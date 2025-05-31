@@ -67,6 +67,10 @@ textarea {
   color: white;
   text-align: right;
 }
+.highlight {
+  font-weight: bold;
+  background-color: yellow;
+}
 
 #users {
   /* background-color: #ffffff; */
@@ -140,12 +144,22 @@ p#status {
   visibility: visible;
 }
 
-.highlight {
-  position: absolute;
-  background-color: rgba(255, 255, 0, 0.5); /* Yellow highlight */
-  pointer-events: none;
-  z-index: 1000;
-  visibility: visible;
+#editor {
   display: block;
-  border: 1px solid red;
+  width: 80%;
+  height: 300px;
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: rgb(26, 26, 26);
+  color: white;
+  transition: 0.5s;
+  overflow-y: auto;
+}
+
+.highlight {
+  display: inline;
 }

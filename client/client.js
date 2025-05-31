@@ -3,15 +3,8 @@ const editor = document.getElementById("editor");
 const statustext = document.getElementById("status");
 const usersDiv = document.getElementById("users");
 
-
-
 const cursors = {};
 
-/**
- * Updates the cursor based on data sent by the backend.
- * @param {string} clientId The ID of the client owning the cursor.
- * @param {Object} position The position (x, y) of the cursor.
- */
 function updateCursor(clientId, position) {
   if (!cursors[clientId]) {
     const cursorElement = document.createElement("div");
@@ -54,7 +47,20 @@ function removeCursor(clientId) {
   }
 }
 
-// WebSocket connection status
+function applyHighlight(range) {
+  const text = editor.innerText;
+  const { start, end } = range;
+
+  const before = text.slice(0, start);
+  const highlighted = `<span class="highlight" style="background-color: #778a42">${text.slice(
+    start,
+    end
+  )}</span>`;
+  const after = text.slice(end);
+
+  editor.innerHTML = before + highlighted + after;
+}
+
 ws.onopen = () => {
   statustext.textContent = "Connected";
   statustext.classList.add("status-connected");
@@ -72,7 +78,7 @@ ws.onmessage = (event) => {
     const message = JSON.parse(event.data);
 
     if (message.type === "text-update") {
-      editor.value = message.text;
+      editor.innerText = message.text;
     }
 
     if (message.type === "cursor-update") {
@@ -87,12 +93,8 @@ ws.onmessage = (event) => {
       removeCursor(message.clientId);
     }
 
-    if (message.type === "text-select") {
-      console.log(
-          `User ${message.clientId} selected text:`,
-          message.selectionRange
-      );
-      updateSelection(message.clientId, message.selectionRange);
+    if (message.type === "highlight") {
+      applyHighlight(message.range);
     }
   } catch (error) {
     console.error("Invalid message received:", event.data);
@@ -100,7 +102,7 @@ ws.onmessage = (event) => {
 };
 
 editor.addEventListener("input", () => {
-  ws.send(JSON.stringify({ type: "text-update", text: editor.value }));
+  ws.send(JSON.stringify({ type: "text-update", text: editor.innerText }));
 });
 
 let lastCursorUpdate = 0;
@@ -111,20 +113,20 @@ document.addEventListener("mousemove", (e) => {
   };
 
   ws.send(
-      JSON.stringify({
-        type: "cursor-update",
-        cursor: cursor,
-      })
+    JSON.stringify({
+      type: "cursor-update",
+      cursor: cursor,
+    })
   );
 });
 
-editor.addEventListener("select", () => {
-  const start = editor.selectionStart;
-  const end = editor.selectionEnd;
-  ws.send(
-      JSON.stringify({
-        type: "text-select",
-        selectionRange: { start, end },
-      })
-  );
+editor.addEventListener("mouseup", () => {
+  const selection = window.getSelection();
+  if (!selection.rangeCount) return;
+
+  const range = selection.getRangeAt(0);
+  const start = range.startOffset;
+  const end = range.endOffset;
+
+  ws.send(JSON.stringify({ type: "highlight", range: { start, end } }));
 });
